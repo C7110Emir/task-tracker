@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import AddTask from './components/AddTask';
 import Header from './components/Header';
 import Tasks from './components/Tasks';
 
@@ -26,6 +27,11 @@ function App() {
   ]);
 
   // Add Task
+  const addTask = (task) => {
+    const id = Math.floor(Math.random() * 100) + 1;
+    const newTask = { id, ...task };
+    setTasks([...tasks, newTask]);
+  };
 
   // Delete Task
   const deleteTask = (deletedTaskId) => {
@@ -33,11 +39,19 @@ function App() {
   };
 
   // Toggle Done
+  const toggleDone = (toggleDoneId) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === toggleDoneId ? { ...task, isDone: !task.isDone } : task
+      )
+    );
+  };
 
   return (
     <div className="container">
       <Header title="Task Tracker" />
-      <Tasks tasks={tasks} deleteTask={deleteTask} />
+      <AddTask addTask={addTask} />
+      <Tasks tasks={tasks} deleteTask={deleteTask} toggleDone={toggleDone} />
     </div>
   );
 }
