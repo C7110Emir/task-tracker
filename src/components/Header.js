@@ -2,18 +2,14 @@ import React from 'react';
 import Button from './Button';
 //import PropTypes from 'prop-types';
 
-const Header = ({ title }) => {
-  const handleClick = () => {
-    console.log('Click');
-  };
-
+const Header = ({ title, showAddTask, toggleShow }) => {
   return (
     <header className="header">
       <h1>{title}</h1>
       <Button
-        color="purple"
-        text="Show Add Task Bar"
-        handleClick={handleClick}
+        color={showAddTask ? 'red' : 'purple'}
+        text={showAddTask ? 'Close Add Task Bar' : 'Show Add Task Bar'}
+        toggleShow={toggleShow}
       />
     </header>
   );
