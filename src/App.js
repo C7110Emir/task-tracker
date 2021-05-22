@@ -1,4 +1,3 @@
-  
 import { useState } from 'react';
 import './App.css';
 import Header from './components/Header';
@@ -26,10 +25,19 @@ function App() {
     },
   ]);
 
+  // Add Task
+
+  // Delete Task
+  const deleteTask = (deletedTaskId) => {
+    setTasks(tasks.filter((task) => task.id !== deletedTaskId));
+  };
+
+  // Toggle Done
+
   return (
     <div className="container">
       <Header title="Task Tracker" />
-      <Tasks tasks={tasks} />
+      <Tasks tasks={tasks} deleteTask={deleteTask} />
     </div>
   );
 }
