@@ -1,51 +1,61 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './App.css';
 import AddTask from './components/AddTask';
 import Header from './components/Header';
 import Tasks from './components/Tasks';
+import axios from 'axios';
+
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      text: 'Study React Pre-Class Notes',
-      day: 'Feb 5th at 2:30pm',
-      isDone: false,
-    },
-    {
-      id: 2,
-      text: 'Feed the Dog',
-      day: 'Feb 6th at 1:30pm',
-      isDone: false,
-    },
-    {
-      id: 3,
-      text: 'Attend in-Class',
-      day: 'Feb 7th at 20:00pm',
-      isDone: false,
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
 
+  const fetchTasks = async () => {
+    const res = await fetch("http://localhost:5000/tasks")
+    const data = await res.json();
+    setTasks(data)
+  }
+
+  useEffect(()=>{
+    fetchTasks();
+  })
+
+  
   // Add Task
-  const addTask = (task) => {
-    const id = Math.floor(Math.random() * 100) + 1;
-    const newTask = { id, ...task };
-    setTasks([...tasks, newTask]);
-  };
+  const addTask = async (task) =>{
+    const res = await fetch("http://localhost:5000/tasks", {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(task)
+    })
+    const data = await res.json()
+    fetchTasks()
+  }
 
   // Delete Task
-  const deleteTask = (deletedTaskId) => {
-    setTasks(tasks.filter((task) => task.id !== deletedTaskId));
-  };
+  const deleteTask = async (id) =>{
+    await fetch(`http://localhost:5000/tasks/${id}`,{
+      method:"DELETE"
+    })
+    fetchTasks()
+  }
 
   // Toggle Done
-  const toggleDone = (toggleDoneId) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === toggleDoneId ? { ...task, isDone: !task.isDone } : task
-      )
-    );
+  const toggleDone = async (toggleDoneId) => {
+    const res = await fetch(`http://localhost:5000/tasks/${toggleDoneId}`)
+    const data = await res.json()
+    const updatedTask = {...data, isDone: !data.isDone}
+
+  const updatedRes = await fetch(`http://localhost:5000/tasks/${toggleDoneId}`,{
+    method:"PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(updatedTask)
+  })
+  fetchTasks()
   };
 
   // Toggle Show

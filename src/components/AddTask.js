@@ -12,6 +12,12 @@ const AddTask = ({ addTask }) => {
     setText('');
     setDay('');
   };
+  const handleChangetext = (e) =>{
+    setText(e.target.value);
+  }
+  const handleChangeDay = (e) => {
+    setDay(e.target.value)
+  }
 
   return (
     <form className="add-form" onSubmit={onSubmit}>
@@ -23,7 +29,7 @@ const AddTask = ({ addTask }) => {
           type="text"
           placeholder="AddTask"
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={handleChangetext}
         />
       </div>
       <div className="form-control">
@@ -34,7 +40,7 @@ const AddTask = ({ addTask }) => {
           type="text"
           placeholder="Add Day & Time"
           value={day}
-          onChange={(e) => setDay(e.target.value)}
+          onChange={handleChangeDay}
         />
       </div>
       <input type="submit" value="Save Task" className="btn btn-block" />
